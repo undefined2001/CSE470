@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light(useMaterial3: true),
+      theme: ThemeData(fontFamily: "Poppins"),
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
