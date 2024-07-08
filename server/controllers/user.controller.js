@@ -1,13 +1,27 @@
 const User = require('../models/user.model');
 
-const userLogin = async (req, res) => {
 
+const userLogin = async (req, res) => {
     const { phone, password } = req.body;
-    const user = await User.findOne({where:{phone:phone}});
-    if(user)
-    {
-        
+    const user = await User.findOne({ where: { phone: phone } });
+    const isValid = await user.validatePassword(password);
+    if (isValid) {
+        res.json({ message: "Logged in Successfully." });
     }
+    else {
+        res.json({ message: "Number or Password is Invalid" });
+    }
+}
+
+const userRegister = async (req, res) => {
+    const { firstName, lastName, phone, password } = req.body;
+    let existingUser = await User.findOne({ where: { phone: phone } });
+    if (existingUser) {
+        return res.status(409).json({ message: "user with this phone number already exists" });
+    }
+    user = User.build({ firstName: firstName, lastName: lastName, phone: phone, password: password });
+    user.save();
+    res.json({ message: "user created successfully" });
 }
 
 const getAllUser = async (req, res) => {
@@ -15,4 +29,4 @@ const getAllUser = async (req, res) => {
     res.status(200).send({ user });
 }
 
-module.exports = { getAllUser, userLogin };
+module.exports = { getAllUser, userLogin, userRegister };
