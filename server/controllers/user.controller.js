@@ -9,7 +9,7 @@ const userLogin = async (req, res) => {
         res.json({ message: "Logged in Successfully." });
     }
     else {
-        res.json({ message: "Number or Password is Invalid" });
+        res.status(401).json({ message: "Number or Password is Invalid" });
     }
 }
 
@@ -19,7 +19,7 @@ const userRegister = async (req, res) => {
     if (existingUser) {
         return res.status(409).json({ message: "user with this phone number already exists" });
     }
-    user = User.build({ firstName: firstName, lastName: lastName, phone: phone, password: password });
+    user = await User.create({ firstName: firstName, lastName: lastName, phone: phone, password: password });
     user.save();
     res.json({ message: "user created successfully" });
 }
